@@ -33,9 +33,10 @@ public class UserController {
     public User retrieveUser(@PathVariable int id){
         User user =service.findOne(id);
         if(user==null){
-            throw new UserNotFoundException(String.format("ID[%] not found ", id) );
+            log.info(" 유저 없음");
+            throw new UserNotFoundException(String.format("ID[%s] not found ", id) );
         }
-        return service.findOne(id);
+        return user;
     }
 
 
@@ -49,7 +50,6 @@ public class UserController {
                 .buildAndExpand(savedUser.getId())
                 .toUri();
 //        log.info(" *****  uri {} ", uri);
-
         //ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
         return ResponseEntity.created(location).build();
 
