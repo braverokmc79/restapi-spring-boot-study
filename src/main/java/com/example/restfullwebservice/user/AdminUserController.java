@@ -3,6 +3,7 @@ package com.example.restfullwebservice.user;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,13 +24,21 @@ public class AdminUserController {
 
 
     @GetMapping("/users")
-    public List<User> retrieveAllUsers() {
-        return service.findAll();
+    public MappingJacksonValue retrieveAllUsers() {
+        List<User>  users = service.findAll();
+
+        SimpleBeanPropertyFilter filter =SimpleBeanPropertyFilter.filterOutAllExcept("id","name", "joinDate", "password");
+        FilterProvider filters =new SimpleFilterProvider().addFilter("UserInfo", filter);
+
+        MappingJacksonValue mapping =new MappingJacksonValue(users);
+        mapping.setFilters(filters);
+        return mapping;
     }
 
 
-    @GetMapping("/users/{id}")
-    public MappingJacksonValue retrieveUser(@PathVariable int id){
+    // GET  /admin/users/1 -> /admin/v1/users/1
+    @GetMapping("/v1/users/{id}")
+    public MappingJacksonValue retrieveUserV1(@PathVariable int id){
         User user =service.findOne(id);
         if(user==null){
             throw new UserNotFoundException(String.format("ID[%s] not found", id));
@@ -40,9 +49,40 @@ public class AdminUserController {
 
         MappingJacksonValue mapping =new MappingJacksonValue(user);
         mapping.setFilters(filters);
-
         return mapping;
     }
+
+
+
+
+    // GET  /admin/users/1 -> /admin/v2/users/1
+    @GetMapping("/v2/users/{id}")
+    public MappingJacksonValue retrieveUserV2(@PathVariable int id){
+        System.out.println("MappingJacksonValue  V2=========================> ");
+        User user =service.findOne(id);
+        if(user==null){
+            throw new UserNotFoundException(String.format("ID[%s] not found", id));
+        }
+
+        //User -> User2
+        UserV2 userV2=new UserV2();
+        BeanUtils.copyProperties(user, userV2); //id, name, joinDate, password, ssn
+        userV2.setGrade("VIP");
+
+        System.out.println("2222222222 MappingJacksonValue  V2=========================> ");
+
+        SimpleBeanPropertyFilter filter =SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "joinDate", "grade");
+        FilterProvider filters =new SimpleFilterProvider().addFilter("UserInfo2", filter);
+
+        System.out.println("33333333333333 MappingJacksonValue  V2=========================> ");
+
+
+        MappingJacksonValue mapping =new MappingJacksonValue(userV2);
+        mapping.setFilters(filters);
+        return mapping;
+    }
+
+
 
 
 
