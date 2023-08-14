@@ -9,6 +9,8 @@ spring:
     restart:
       enabled: true
 
+  messages:
+    basename : messages
 server:
   port: 8088
 
