@@ -1,5 +1,6 @@
 package com.example.restfullwebservice.user;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Past;
@@ -11,7 +12,8 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
-@JsonIgnoreProperties(value = {"password" })
+//@JsonIgnoreProperties(value = {"password" })
+@JsonFilter("UserInfo")
 public class User {
     private Integer id;
 
@@ -25,8 +27,9 @@ public class User {
 //  @JsonIgnore
     private String password;
 
-    @JsonIgnore
+  //  @JsonIgnore
     private String ssn;
+
 
 
 
