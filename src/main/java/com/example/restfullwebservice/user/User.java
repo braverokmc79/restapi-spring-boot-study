@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
@@ -16,6 +14,8 @@ import java.util.Date;
 //@JsonIgnoreProperties(value = {"password" })
 @JsonFilter("UserInfo")
 @NoArgsConstructor
+@ToString
+@Builder
 public class User {
 
     private Integer id;
@@ -32,9 +32,6 @@ public class User {
 
   //  @JsonIgnore
     private String ssn;
-
-
-
 
 
 }
