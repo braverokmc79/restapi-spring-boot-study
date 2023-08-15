@@ -37,7 +37,10 @@ public class AdminUserController {
 
 
     // GET  /admin/users/1 -> /admin/v1/users/1
-    @GetMapping("/v1/users/{id}")
+   // @GetMapping("/v1/users/{id}")
+ //   @GetMapping(value="/users/{id}", params="version=1" )
+    //@GetMapping(value = "/users/{id}", headers = "X-API-TEST-VERSION=1")
+    @GetMapping(value = "/users/{id}", produces = "application/vnd.myTest.appv1+json")
     public MappingJacksonValue retrieveUserV1(@PathVariable int id){
         User user =service.findOne(id);
         if(user==null){
@@ -56,7 +59,11 @@ public class AdminUserController {
 
 
     // GET  /admin/users/1 -> /admin/v2/users/1
-    @GetMapping("/v2/users/{id}")
+  //  @GetMapping("/v2/users/{id}")
+
+//    @GetMapping(value = "/users/{id}", params = "version=2")
+    //@GetMapping(value = "/users/{id}", headers = "X-API-TEST-VERSION=2")
+    @GetMapping(value = "/users/{id}" , produces = "application/vnd.myTest.appv2+json")
     public MappingJacksonValue retrieveUserV2(@PathVariable int id){
         System.out.println("MappingJacksonValue  V2=========================> ");
         User user =service.findOne(id);
@@ -69,18 +76,14 @@ public class AdminUserController {
         BeanUtils.copyProperties(user, userV2); //id, name, joinDate, password, ssn
         userV2.setGrade("VIP");
 
-        System.out.println("2222222222 MappingJacksonValue  V2=========================> ");
-
         SimpleBeanPropertyFilter filter =SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "joinDate", "grade");
         FilterProvider filters =new SimpleFilterProvider().addFilter("UserInfo2", filter);
-
-        System.out.println("33333333333333 MappingJacksonValue  V2=========================> ");
-
 
         MappingJacksonValue mapping =new MappingJacksonValue(userV2);
         mapping.setFilters(filters);
         return mapping;
     }
+
 
 
 
