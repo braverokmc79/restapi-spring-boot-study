@@ -1,3 +1,7 @@
+server:
+  port: 8088
+
+
 spring:
   output:
      ansi:
@@ -11,12 +15,11 @@ spring:
 
   messages:
     basename : messages
-server:
-  port: 8088
+
 
 logging:
   level:
-    org.springframework: DEBUG
+    org.springframework: info
 
 
 

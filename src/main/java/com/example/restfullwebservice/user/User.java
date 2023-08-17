@@ -9,13 +9,13 @@ import lombok.*;
 
 import java.util.Date;
 
-@Data
-@AllArgsConstructor
-//@JsonIgnoreProperties(value = {"password" })
-@JsonFilter("UserInfo")
-@NoArgsConstructor
+@Getter
+@Setter
+@JsonIgnoreProperties(value = {"password" })
+//@JsonFilter("UserInfo")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-@Builder
+@EqualsAndHashCode(of="id")
 public class User {
 
     private Integer id;
@@ -32,6 +32,17 @@ public class User {
 
   //  @JsonIgnore
     private String ssn;
+
+
+    @Builder
+    public User(Integer id, String name, Date joinDate, String password, String ssn){
+        this.id=id;
+        this.name=name;
+        this.joinDate=joinDate;
+        this.password=password;
+        this.ssn=ssn;
+    }
+
 
 
 }
