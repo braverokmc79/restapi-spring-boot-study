@@ -3,6 +3,12 @@ server:
 
 
 spring:
+#  security:
+#    user:
+#      name: username
+#      password: 1111
+
+
   output:
      ansi:
          enabled: always
@@ -15,6 +21,7 @@ spring:
 
   messages:
     basename : messages
+
 
 
 logging:
@@ -39,5 +46,6 @@ springdoc:
 #    web:
 #      exposure:
 #        include: "*"
+
 
 
