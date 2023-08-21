@@ -4,6 +4,12 @@ package com.example.restfullwebservice.config;
 //https://velog.io/@kjgi73k/Springboot3에-Swagger3적용하기
 
 
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 /**
  * Spring boot Swagger 3.0 적용하기
  *
@@ -16,11 +22,21 @@ package com.example.restfullwebservice.config;
 //                version = "v1"
 //        )
 //)
-//@Configuration
-//@RequiredArgsConstructor
+@Configuration
 public class SwaggerConfig {
+    @Bean
+    public OpenAPI openAPI() {
+        return new OpenAPI()
+                .components(new Components())
+                .info(apiInfo());
+    }
 
-
+    private Info apiInfo() {
+        return new Info()
+                .title("Springdoc 테스트")
+                .description("Springdoc을 사용한 Swagger UI 테스트")
+                .version("1.0.0");
+    }
 
 
 }
