@@ -4,12 +4,17 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Date;
 
+@Entity
 @Getter
 @Setter
 @JsonIgnoreProperties(value = {"password" })
@@ -18,9 +23,13 @@ import java.util.Date;
 @ToString
 @EqualsAndHashCode(of="id")
 @Schema(description = "사용자 상세 정보를 위한 도메인 객체")
+@Table(name = "TBL_USER")
 public class User {
 
+    @Id
+    @GeneratedValue
     private Integer id;
+
 
     @Size(min=2, message = "Name 은 2글자 이상 입력해 주세요.")
     @Schema(description = "사용자 이름을 입력해 주세요.")
