@@ -112,9 +112,41 @@ public class UserJpaController {
 
 
 
-    
+    //게시글 및 작성자 정보 가져오기
+    //
+    // http://localhost:8088/jpa/users/1/posts
+    /**
+     *
+     * http://localhost:8088/jpa/users/1/posts
+     * @param id
+     * @return
+     */
+    @GetMapping("/users/{id}/posts")
+    public List<Post> retrieveAllPostsByUser(@PathVariable int id ){
+        Optional<User> user= userRepository.findById(id);
+
+        if(user.isEmpty()){
+            throw new UserNotFoundException(String.format("ID[%s} not found", id));
+        }
+
+        return user.get().getPosts();
+    }
 
 
+/** 출력 =>
+ * [
+ *     {
+ *         "id": 1,
+ *         "description": "My first post"
+ *     },
+ *     {
+ *         "id": 2,
+ *         "description": "My second post"
+ *     }
+ * ]
+ *
+ *
+ */
 
 
 
