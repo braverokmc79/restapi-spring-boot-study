@@ -2,14 +2,17 @@ package com.example.restfullwebservice.user;
 
 
 
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +20,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping("/jpa")
+@Slf4j
 public class UserJpaController {
 
     @Autowired
     private UserRepository userRepository;
+
 
 
     // http://localhost:8088/jpa/users   or http://localhost:8088/users
@@ -60,7 +65,7 @@ public class UserJpaController {
         Optional<User> user =userRepository.findById(id);
 
         if(user.isEmpty()){
-            throw new UserNotFoundException(String.format("ID{%s} not found", id));
+            throw new UserNotFoundException(String.format("ID[%s] not found", id));
         }
 
        // Resource
@@ -70,6 +75,42 @@ public class UserJpaController {
 
         return userEntityModel;
     }
+
+
+    /**
+     * 삭제
+     * @param id
+     */
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable int id){
+        log.info("**** deleteUser");
+        userRepository.deleteById(id);
+    }
+
+
+    
+    /** 등록
+     * insert into tbl_user (join_date,name,password,ssn,id) values (?,?,?,?,?)
+     * @param user
+     * @return
+     */
+    @PostMapping("/users")
+    public ResponseEntity<?> createUser(@Valid @RequestBody User user){
+
+        User  savedUser=userRepository.save(user);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedUser.getId())
+                .toUri();
+
+        ResponseEntity<User> build = ResponseEntity.created(location).build();
+        log.info("** 유저 등록  : {}" , build);
+        //return ResponseEntity.status(HttpStatus.CREATED).body(build.toString());
+        return build;
+    }
+
+
 
 
 
