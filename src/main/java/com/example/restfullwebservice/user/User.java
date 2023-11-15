@@ -11,6 +11,7 @@ import lombok.*;
 import org.springframework.context.annotation.Primary;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,6 +48,11 @@ public class User {
   //  @JsonIgnore
    @Schema(description = "사용자 주민번호를   입력해 주세요.")
     private String ssn;
+
+
+   @OneToMany(mappedBy = "user")
+   private List<Post> posts;
+
 
 
     @Builder
